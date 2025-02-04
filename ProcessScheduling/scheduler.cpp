@@ -12,30 +12,37 @@ void Scheduler::addProcess(ProcessControlBlock pcb)
 }
 
 /**
- * @brief Schedule the next process based on FCFS.
+ * @brief Schedule the next process based on round-robin.
  */
-void Scheduler::schedule()
-{
-    if (currentProcess != nullptr)
-    {
-        std::cout << "Process " << currentProcess->id << " finished execution." << std::endl;
-        delete currentProcess;
-        currentProcess = nullptr;
-    }
-
-    if (!readyQueue.isEmpty())
-    {
-        currentProcess = new ProcessControlBlock(readyQueue.getNextProcess());
-        if (currentProcess == nullptr)
-        {
-            std::cerr << "Failed to allocate memory for currentProcess" << std::endl;
-            exit(EXIT_FAILURE);
+void Scheduler::schedule() {
+    while (true) {
+        int all_done = 1;
+        while (!readyQueue.isEmpty()) {
+            ProcessControlBlock* process = readyQueue.getNextProcess();
+            if (process->remaining_time > 0) {
+                all_done = 0;
+                printf("Executing process %d\n", process->id);
+                runProcess(process);
+            }
         }
-
-        currentProcess->task(currentProcess->id);
+        if (all_done) {
+            break; 
+        }
     }
-    else
-    {
-        std::cout << "No more processes to schedule." << std::endl;
+}
+
+void Scheduler::runProcess(ProcessControlBlock *p) {
+    if (setjmp(p->context) == 0) {
+        // Execute process for one quantum
+        if (p->remaining_time > quantum) {
+            p->remaining_time -= quantum;
+        } else {
+            p->remaining_time = 0; // Process completed
+        }
+        // If process not finished, reschedule
+        if (p->remaining_time > 0) {
+            readyQueue.addProcess(*p);
+            longjmp(p->context, 1);
+        }
     }
 }
