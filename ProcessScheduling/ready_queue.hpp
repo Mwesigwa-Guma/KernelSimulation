@@ -8,24 +8,31 @@
 /**
  * @brief A class to manage the ready queue of processes.
  */
-class ReadyQueue {
+class ReadyQueue
+{
 public:
     /**
      * @brief Add a process to the ready queue.
      *
      * @param pcb Process to add to the ready queue.
      */
-    void addProcess(ProcessControlBlock pcb) {
+    void addProcess(ProcessControlBlock pcb)
+    {
         queue.push(pcb);
     }
 
     /**
      * @brief Get the next process based on FCFS.
      *
-     * @return ProcessControlBlock The next process to be scheduled.
+     * @return ProcessControlBlock* The next process to be scheduled.
      */
-    ProcessControlBlock getNextProcess() {
-        ProcessControlBlock pcb = queue.front();
+    ProcessControlBlock* getNextProcess()
+    {
+        if (queue.empty())
+        {
+            return nullptr;
+        }
+        ProcessControlBlock* pcb = new ProcessControlBlock(queue.front());
         queue.pop();
         return pcb;
     }
@@ -35,7 +42,8 @@ public:
      *
      * @return true if the ready queue is empty, false otherwise.
      */
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return queue.empty();
     }
 

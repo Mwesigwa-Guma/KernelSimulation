@@ -2,13 +2,16 @@
 #define PCB_H
 
 #include <iostream>
+#include <setjmp.h>
 
 /**
  * @brief A struct to represent a process control block.
  */
 struct ProcessControlBlock {
-    int id;                // Process ID
-    void (*task)(int);     // Function to execute for this process
+    int id;
+    int remaining_time;               
+    jmp_buf context;       // Context for setjmp/longjmp
+    
 
     /**
      * @brief Construct a new ProcessControlBlock object.
@@ -16,12 +19,12 @@ struct ProcessControlBlock {
      * @param processId The ID of the process.
      * @param func Pointer to the function to execute in this process.
      */
-    ProcessControlBlock(int processId, void (*func)(int))
-        : id(processId), task(func) {}
+    ProcessControlBlock(int processId, int remainingTime)
+        : id(processId), remaining_time(remainingTime) {}
 
     /**
      * @brief Destroy the ProcessControlBlock object.
-     */
+     */ 
     ~ProcessControlBlock() {}
 };
 

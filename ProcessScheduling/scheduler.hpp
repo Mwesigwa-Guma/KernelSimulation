@@ -3,16 +3,18 @@
 
 /**
  * @brief A class to manage the scheduling of processes.
- * 
+ *
  */
 class Scheduler
 {
-public:
-    Scheduler() : currentProcess(nullptr) {}
+        void runProcess(ProcessControlBlock *p);
 
-    void addProcess(ProcessControlBlock pcb);
-    void schedule();
+    public:
+        Scheduler(int quantum) : quantum(quantum) {}
 
-    ReadyQueue readyQueue;               // The ready queue of processes
-    ProcessControlBlock *currentProcess; // The current process
+        void addProcess(ProcessControlBlock pcb);
+        void schedule();
+
+        ReadyQueue readyQueue; // The ready queue of processes
+        int quantum;           // Time slice for each process
 };
