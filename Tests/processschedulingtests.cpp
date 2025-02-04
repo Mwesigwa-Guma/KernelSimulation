@@ -1,4 +1,4 @@
-#include "scheduler.hpp"
+#include "../ProcessScheduling/scheduler.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 
@@ -67,9 +67,4 @@ TEST_F(SchedulerTest, EmptyReadyQueue) {
     // Check if the scheduler handles an empty ready queue
     scheduler.schedule();
     EXPECT_EQ(scheduler.currentProcess, nullptr);
-}
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
