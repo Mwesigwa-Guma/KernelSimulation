@@ -8,7 +8,7 @@
 class Scheduler
 {
         void runProcess(ProcessControlBlock *p);
-        int quantum = 1;           // Time slice for each process
+        int quantum = 1;           // Time slice for each thread
     public:
         Scheduler() {}
         ~Scheduler();

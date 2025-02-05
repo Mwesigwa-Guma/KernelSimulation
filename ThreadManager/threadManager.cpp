@@ -20,6 +20,7 @@ void ThreadManager::runAll()
     while (!threadReadyQueue.isEmpty()) {
         ThreadControlBlock* thread = threadReadyQueue.getNextThread();
         thread->task();
+        delete thread;
     }
 }
 
@@ -28,5 +29,6 @@ void ThreadManager::runNext(){
     if (!threadReadyQueue.isEmpty()) {
         ThreadControlBlock* thread = threadReadyQueue.getNextThread();
         thread->task();
+        delete thread;
     }
 }
