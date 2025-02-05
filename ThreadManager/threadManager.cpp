@@ -1,4 +1,3 @@
-
 #include "threadManager.hpp"
 
 void ThreadManager::createThread(std::function<void()> func)
@@ -8,11 +7,20 @@ void ThreadManager::createThread(std::function<void()> func)
     threadReadyQueue.addThread(tcb);
 }
 
-void ThreadManager::run()
+void ThreadManager::runAll()
 {
     while (!threadReadyQueue.isEmpty()) {
-            ThreadControlBlock* thread = threadReadyQueue.getNextThread();
-            thread->task();
-            delete thread; // Clean up completed thread
-        }
+        ThreadControlBlock* thread = threadReadyQueue.getNextThread();
+        thread->task();
+        delete thread; // Clean up completed thread
+    }
+}
+
+// run next thread in queue
+void ThreadManager::runNext(){
+    if (!threadReadyQueue.isEmpty()) {
+        ThreadControlBlock* thread = threadReadyQueue.getNextThread();
+        thread->task();
+        delete thread; // Clean up completed thread
+    }
 }

@@ -8,6 +8,7 @@
  */
 void Scheduler::addProcess(ProcessControlBlock* pcb)
 {
+
     readyQueue.addProcess(pcb);
 }
 
@@ -35,15 +36,18 @@ void Scheduler::runProcess(ProcessControlBlock *p) {
     if (setjmp(p->context) == 0) {
         // Execute process for one quantum
         if (p->remaining_time > quantum) {
+            // Execute thread tasks using ThreadManager within the process
+            p->threadManager.runNext();
             p->remaining_time -= quantum;
         } else {
+            p->threadManager.runAll(); // Execute remaining time
             p->remaining_time = 0; // Process completed
         }
         // If process not finished, reschedule
         if (p->remaining_time > 0) {
             readyQueue.addProcess(p);
             longjmp(p->context, 1);
-        }else {
+        } else {
             std::cout << "Process completed : " << p->id << std::endl;
             delete p; // Clean up completed process
         }

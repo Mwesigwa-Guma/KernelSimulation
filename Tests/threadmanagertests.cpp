@@ -70,5 +70,5 @@ TEST_F(ThreadManagerTest, RunThreadTasks)
 // Test case to check if the scheduler schedules processes correctly
 TEST_F(ThreadManagerTest, Run)
 {
-    EXPECT_NO_THROW(manager.run());
+    EXPECT_NO_THROW(manager.runAll());
 }

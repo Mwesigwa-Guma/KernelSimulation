@@ -91,3 +91,24 @@ TEST_F(SchedulerTest, IPCDataSharing)
     message = scheduler.receiveMessage(1);
     EXPECT_EQ(message, "Acknowledged by Process 2");
 }
+
+// Test case to check if the ThreadManager in ProcessControlBlock works correctly
+TEST_F(SchedulerTest, ThreadManagerInProcessControlBlock)
+{
+    // Create a process with threads
+    ProcessControlBlock *pcb3 = new ProcessControlBlock(3, 4);
+    pcb3->threadManager.createThread([]() {
+        std::cout << "Thread 1 in Process 3" << std::endl;
+    });
+    pcb3->threadManager.createThread([]() {
+        std::cout << "Thread 2 in Process 3" << std::endl;
+    });
+
+    scheduler.addProcess(pcb3);
+
+    // Schedule the process
+    scheduler.schedule();
+
+    // Check if the process and its threads were executed correctly
+    EXPECT_TRUE(scheduler.readyQueue.isEmpty());
+}
