@@ -23,13 +23,13 @@ class ThreadManagerTest : public ::testing::Test
 protected:
     ThreadManager manager;
 
-    ThreadManagerTest() : manager(2) {} // Initialize ThreadManager with quantum of 2
+    ThreadManagerTest() : manager() {} // Initialize ThreadManager with quantum of 2
 
     void SetUp() override
     {
         // create two threads
-        manager.createThread(3, threadOne);
-        manager.createThread(5, threadTwo);
+        manager.createThread(threadOne);
+        manager.createThread(threadTwo);
     }
 
     void TearDown() override
@@ -46,7 +46,7 @@ protected:
 // Test case to check if threads are added to the scheduler
 TEST_F(ThreadManagerTest, AddThread)
 {
-    manager.createThread(2, threadThree);
+    manager.createThread(threadThree);
 
     // Check if the process was added to the ready queue
     EXPECT_FALSE(manager.threadReadyQueue.isEmpty());
