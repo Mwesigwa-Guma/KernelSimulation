@@ -7,16 +7,15 @@ void ThreadManager::createThread(int remainingTime, std::function<void()> func)
     tcb->state = ThreadState::READY;
     tcb->task = func;
     tcb->remaining_time = remainingTime;
-    threads.push(tcb);
+    threadReadyQueue.addThread(tcb);
 }
 
 void ThreadManager::run()
 {
     while (true) {
         int all_done = 1;
-        while (!threads.empty()) {
-            ThreadControlBlock* thread = threads.front();
-            threads.pop();
+        while (!threadReadyQueue.isEmpty()) {
+            ThreadControlBlock* thread = threadReadyQueue.getNextThread();
             if (thread->remaining_time > 0) {
                 all_done = 0;
                 runThread(thread);
@@ -32,6 +31,7 @@ void ThreadManager::runThread(ThreadControlBlock *t) {
     if (setjmp(t->context) == 0) {
         // Execute thread for one quantum
         if (t->remaining_time > quantum) {
+            t->state = ThreadState::RUNNING; // Set state to RUNNING
             t->task(); // Execute the thread's task
             t->remaining_time -= quantum;
         } else {
@@ -39,10 +39,11 @@ void ThreadManager::runThread(ThreadControlBlock *t) {
         }
         // If process not finished, reschedule
         if (t->remaining_time > 0) {
-            threads.push(t);
+            t->state = ThreadState::READY; // Set state to READY
+            threadReadyQueue.addThread(t);
             longjmp(t->context, 1);
         }else {
-            std::cout << "Thread completed" << std::endl;
+            t->state = ThreadState::TERMINATED; // Set state to TERMINATED
             delete t; // Clean up completed process
         }
     }

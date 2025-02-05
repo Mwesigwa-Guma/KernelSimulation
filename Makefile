@@ -42,7 +42,7 @@ threadmanagertests.o: $(PROCESSHEADERS) Tests/threadmanagertests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/threadmanagertests.cpp -o threadmanagertests.o
 
 # Compile threadmanager.cpp to threadmanager.o
-threadmanager.o: ThreadManager/ThreadManager.cpp ThreadManager/ThreadManager.hpp
+threadmanager.o: ThreadManager/ThreadManager.cpp ThreadManager/ThreadManager.hpp ThreadManager/threadReadyQueue.hpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ThreadManager/ThreadManager.cpp -o threadmanager.o
 
 # Compile test.cpp to test.o

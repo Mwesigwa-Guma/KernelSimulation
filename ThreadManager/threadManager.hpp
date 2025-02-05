@@ -1,6 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <functional>
 #include <csetjmp>
+#include "threadReadyQueue.hpp"
 
 // Thread State Enum
 enum class ThreadState { READY, RUNNING, TERMINATED };
@@ -21,6 +24,6 @@ public:
     void createThread(int remainingTime, std::function<void()> func);
     void run();
 
-    std::queue<ThreadControlBlock*> threads;
+    ThreadReadyQueue threadReadyQueue;
     int quantum;
 };

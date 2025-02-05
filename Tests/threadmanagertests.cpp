@@ -29,16 +29,15 @@ protected:
     {
         // create two threads
         manager.createThread(3, threadOne);
-        manager.createThread(5, threadOne);
+        manager.createThread(5, threadTwo);
     }
 
     void TearDown() override
     {
         std::cout << "TearDown created resources" << std::endl;
-        while (!manager.threads.empty())
+        while (!manager.threadReadyQueue.isEmpty())
         {
-            ThreadControlBlock *t = manager.threads.front();
-            manager.threads.pop();
+            ThreadControlBlock *t = manager.threadReadyQueue.getNextThread();
             delete t;
         }
     }
@@ -50,21 +49,19 @@ TEST_F(ThreadManagerTest, AddThread)
     manager.createThread(2, threadThree);
 
     // Check if the process was added to the ready queue
-    EXPECT_FALSE(manager.threads.empty());
+    EXPECT_FALSE(manager.threadReadyQueue.isEmpty());
 }
 
 // Test case to run thread tasks
 TEST_F(ThreadManagerTest, RunThreadTasks)
 {
-    ThreadControlBlock *t1 = manager.threads.front();
-    manager.threads.pop();
+    ThreadControlBlock *t1 = manager.threadReadyQueue.getNextThread();
     EXPECT_NO_THROW(t1->task());
 
-    ThreadControlBlock *t2 = manager.threads.front();
-    manager.threads.pop();
+    ThreadControlBlock *t2 = manager.threadReadyQueue.getNextThread();
     EXPECT_NO_THROW(t1->task());
 
-    EXPECT_TRUE(manager.threads.empty());
+    EXPECT_TRUE(manager.threadReadyQueue.isEmpty());
     // delete threads
     delete t1;
     delete t2;
