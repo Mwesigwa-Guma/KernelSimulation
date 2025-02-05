@@ -11,7 +11,7 @@ GTEST_INC = -I/opt/homebrew/include
 GTEST_LIB = -L/opt/homebrew/lib -lgtest -lgtest_main -pthread
 
 # header files
-PROCESSHEADERS = ProcessScheduling/scheduler.hpp ProcessScheduling/ready_queue.hpp ProcessScheduling/pcb.hpp
+PROCESSHEADERS = ProcessScheduling/scheduler.hpp ProcessScheduling/ready_queue.hpp ProcessScheduling/pcb.hpp ProcessScheduling/message_queue.hpp
 
 # thread headers
 THREADHEADERS = ThreadManager/ThreadManager.hpp
