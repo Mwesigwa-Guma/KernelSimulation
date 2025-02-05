@@ -3,6 +3,7 @@
         "queue": "cpp",
         "condition_variable": "cpp",
         "iostream": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "ostream": "cpp"
     }
 }

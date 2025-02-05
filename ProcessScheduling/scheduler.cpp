@@ -6,6 +6,7 @@ Scheduler::~Scheduler() {
     while (!readyQueue.isEmpty()) {
         ProcessControlBlock* p = readyQueue.getNextProcess();
         delete p;
+        p = nullptr;
     }
 }
 
@@ -16,7 +17,7 @@ Scheduler::~Scheduler() {
  */
 void Scheduler::addProcess(ProcessControlBlock* pcb, std::function<void()> func)
 {
-    for(int i = 1; i <= quantum; i++){
+    for(int i = 0; i < pcb->remaining_time; i += quantum){
         pcb->threadManager.createThread(func);
     }
 
@@ -61,6 +62,7 @@ void Scheduler::runProcess(ProcessControlBlock *p) {
         } else {
             std::cout << "Process completed : " << p->id << std::endl;
             delete p; // Clean up completed process
+            p = nullptr; // Set pointer to nullptr to avoid dangling pointer
         }
     }
 }

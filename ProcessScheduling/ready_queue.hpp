@@ -34,7 +34,6 @@ public:
         }
         ProcessControlBlock* pcb = queue.front();
         queue.pop();
-        delete pcb; // Free the memory of the process
         return pcb;
     }
 

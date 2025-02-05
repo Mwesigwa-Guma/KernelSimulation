@@ -98,16 +98,10 @@ TEST_F(SchedulerTest, ThreadManagerInProcessControlBlock)
 {
     // Create a process with threads
     ProcessControlBlock *pcb3 = new ProcessControlBlock(3, 4);
-    pcb3->threadManager.createThread([]() {
-        std::cout << "Thread 1 in Process 3" << std::endl;
-    });
-    pcb3->threadManager.createThread([]() {
-        std::cout << "Thread 2 in Process 3" << std::endl;
-    });
 
     scheduler.addProcess(pcb3, []() {
-        std::cout << "Process 3 running" << std::endl;
-    });
+            std::cout << "Process 3 running" << std::endl;
+        });
 
     // Schedule the process
     scheduler.schedule();
