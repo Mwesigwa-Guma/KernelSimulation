@@ -23,22 +23,21 @@ class ThreadManagerTest : public ::testing::Test
 protected:
     ThreadManager manager;
 
-    ThreadManagerTest() : manager(2) {} // Initialize ThreadManager with quantum of 2
+    ThreadManagerTest() : manager() {} // Initialize ThreadManager with quantum of 2
 
     void SetUp() override
     {
         // create two threads
-        manager.createThread(3, threadOne);
-        manager.createThread(5, threadOne);
+        manager.createThread(threadOne);
+        manager.createThread(threadTwo);
     }
 
     void TearDown() override
     {
         std::cout << "TearDown created resources" << std::endl;
-        while (!manager.threads.empty())
+        while (!manager.threadReadyQueue.isEmpty())
         {
-            ThreadControlBlock *t = manager.threads.front();
-            manager.threads.pop();
+            ThreadControlBlock *t = manager.threadReadyQueue.getNextThread();
             delete t;
         }
     }
@@ -47,24 +46,22 @@ protected:
 // Test case to check if threads are added to the scheduler
 TEST_F(ThreadManagerTest, AddThread)
 {
-    manager.createThread(2, threadThree);
+    manager.createThread(threadThree);
 
     // Check if the process was added to the ready queue
-    EXPECT_FALSE(manager.threads.empty());
+    EXPECT_FALSE(manager.threadReadyQueue.isEmpty());
 }
 
 // Test case to run thread tasks
 TEST_F(ThreadManagerTest, RunThreadTasks)
 {
-    ThreadControlBlock *t1 = manager.threads.front();
-    manager.threads.pop();
+    ThreadControlBlock *t1 = manager.threadReadyQueue.getNextThread();
     EXPECT_NO_THROW(t1->task());
 
-    ThreadControlBlock *t2 = manager.threads.front();
-    manager.threads.pop();
+    ThreadControlBlock *t2 = manager.threadReadyQueue.getNextThread();
     EXPECT_NO_THROW(t1->task());
 
-    EXPECT_TRUE(manager.threads.empty());
+    EXPECT_TRUE(manager.threadReadyQueue.isEmpty());
     // delete threads
     delete t1;
     delete t2;
@@ -73,5 +70,5 @@ TEST_F(ThreadManagerTest, RunThreadTasks)
 // Test case to check if the scheduler schedules processes correctly
 TEST_F(ThreadManagerTest, Run)
 {
-    EXPECT_NO_THROW(manager.run());
+    EXPECT_NO_THROW(manager.runAll());
 }

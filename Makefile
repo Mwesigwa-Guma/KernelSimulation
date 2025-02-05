@@ -11,10 +11,10 @@ GTEST_INC = -I/opt/homebrew/include
 GTEST_LIB = -L/opt/homebrew/lib -lgtest -lgtest_main -pthread
 
 # header files
-PROCESSHEADERS = ProcessScheduling/scheduler.hpp ProcessScheduling/ready_queue.hpp ProcessScheduling/pcb.hpp
+PROCESSHEADERS = ProcessScheduling/scheduler.hpp ProcessScheduling/ready_queue.hpp ProcessScheduling/pcb.hpp ProcessScheduling/message_queue.hpp
 
 # thread headers
-THREADHEADERS = ThreadManager/ThreadManager.hpp
+THREADHEADERS = ThreadManager/ThreadManager.hpp ThreadManager/threadReadyQueue.hpp
 
 # Object files
 OBJS = test.o scheduler.o processschedulingtests.o threadmanager.o threadmanagertests.o
@@ -30,20 +30,20 @@ $(EXEC): $(OBJS)
 	$(CLANG) $(CLANGFLAGS) $(GTEST_LIB) -o $(EXEC) $(OBJS)
 
 # Compile scheduler.cpp to scheduler.o
-scheduler.o: $(PROCESSHEADERS) ProcessScheduling/scheduler.cpp
+scheduler.o: $(PROCESSHEADERS) $(THREADHEADERS) ProcessScheduling/scheduler.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ProcessScheduling/scheduler.cpp -o scheduler.o
 
 # Compile processschedulingtests.cpp to processschedulingtests.o
-processschedulingtests.o: $(PROCESSHEADERS) Tests/processschedulingtests.cpp
+processschedulingtests.o: $(PROCESSHEADERS) $(THREADHEADERS) Tests/processschedulingtests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/processschedulingtests.cpp -o processschedulingtests.o
 
 # compile threadmanagertests.cpp to threadmanagertests.o
-threadmanagertests.o: $(PROCESSHEADERS) Tests/threadmanagertests.cpp
+threadmanagertests.o: $(PROCESSHEADERS) $(THREADHEADERS) Tests/threadmanagertests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/threadmanagertests.cpp -o threadmanagertests.o
 
 # Compile threadmanager.cpp to threadmanager.o
-threadmanager.o: ThreadManager/ThreadManager.cpp ThreadManager/ThreadManager.hpp
-	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ThreadManager/ThreadManager.cpp -o threadmanager.o
+threadmanager.o: $(THREADHEADERS) ThreadManager/threadManager.cpp
+	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ThreadManager/threadManager.cpp -o threadmanager.o
 
 # Compile test.cpp to test.o
 test.o: Tests/test.cpp

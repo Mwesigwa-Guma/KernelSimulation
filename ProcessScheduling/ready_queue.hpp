@@ -16,7 +16,7 @@ public:
      *
      * @param pcb Process to add to the ready queue.
      */
-    void addProcess(ProcessControlBlock pcb)
+    void addProcess(ProcessControlBlock* pcb)
     {
         queue.push(pcb);
     }
@@ -30,9 +30,9 @@ public:
     {
         if (queue.empty())
         {
-            return nullptr;
+            throw std::runtime_error("Ready queue is empty.");
         }
-        ProcessControlBlock* pcb = new ProcessControlBlock(queue.front());
+        ProcessControlBlock* pcb = queue.front();
         queue.pop();
         return pcb;
     }
@@ -51,7 +51,7 @@ private:
     /**
      * @brief The ready queue of processes.
      */
-    std::queue<ProcessControlBlock> queue;
+    std::queue<ProcessControlBlock*> queue;
 };
 
 #endif // READY_QUEUE_H

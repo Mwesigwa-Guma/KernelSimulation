@@ -8,13 +8,15 @@
 class Scheduler
 {
         void runProcess(ProcessControlBlock *p);
-
+        int quantum = 1;           // Time slice for each thread
     public:
-        Scheduler(int quantum) : quantum(quantum) {}
+        Scheduler() {}
+        ~Scheduler();
 
-        void addProcess(ProcessControlBlock pcb);
+        void addProcess(ProcessControlBlock* pcb, std::function<void()> func);
         void schedule();
+        void sendMessage(int processId, const std::string& message);
+        std::string receiveMessage(int processId);
 
         ReadyQueue readyQueue; // The ready queue of processes
-        int quantum;           // Time slice for each process
 };
