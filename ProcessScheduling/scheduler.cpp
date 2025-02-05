@@ -1,13 +1,24 @@
 #include "scheduler.hpp"
 #include <iostream>
 
+// implement destructor for scheduler
+Scheduler::~Scheduler() {
+    while (!readyQueue.isEmpty()) {
+        ProcessControlBlock* p = readyQueue.getNextProcess();
+        delete p;
+    }
+}
+
 /**
  * @brief Add a process to the scheduler.
  *
  * @param pcb Process to add to the ready queue.
  */
-void Scheduler::addProcess(ProcessControlBlock* pcb)
+void Scheduler::addProcess(ProcessControlBlock* pcb, std::function<void()> func)
 {
+    for(int i = 1; i <= quantum; i++){
+        pcb->threadManager.createThread(func);
+    }
 
     readyQueue.addProcess(pcb);
 }
@@ -40,7 +51,7 @@ void Scheduler::runProcess(ProcessControlBlock *p) {
             p->threadManager.runNext();
             p->remaining_time -= quantum;
         } else {
-            p->threadManager.runAll(); // Execute remaining time
+            p->threadManager.runNext(); // Execute remaining time
             p->remaining_time = 0; // Process completed
         }
         // If process not finished, reschedule

@@ -12,6 +12,7 @@ struct ThreadControlBlock {
 
 class ThreadManager {
 public:
+    ~ThreadManager();
     void createThread(std::function<void()> func);
     void runAll();
     void runNext();

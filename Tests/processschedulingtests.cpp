@@ -10,26 +10,25 @@ protected:
     ProcessControlBlock *pcb1;
     ProcessControlBlock *pcb2;
 
-    SchedulerTest() : scheduler(2) {} // Initialize scheduler with quantum of 2
+    SchedulerTest() : scheduler() {} // Initialize scheduler with quantum of 2
 
     void SetUp() override
     {
         // Initialize the scheduler with some processes
-        pcb1 = new ProcessControlBlock(1, 3);
-        pcb2 = new ProcessControlBlock(2, 5);
+        pcb1 = new ProcessControlBlock(1, 2);
+        pcb2 = new ProcessControlBlock(2, 3);
 
-        scheduler.addProcess(pcb1);
-        scheduler.addProcess(pcb2);
+        scheduler.addProcess(pcb1, []() {
+            std::cout << "Process 1 running" << std::endl;
+        });
+        scheduler.addProcess(pcb2, []() {
+            std::cout << "Process 2 running" << std::endl;
+        });
     }
 
     void TearDown() override
     {
-        while (!scheduler.readyQueue.isEmpty())
-        {
-            ProcessControlBlock *p = scheduler.readyQueue.getNextProcess();
-            delete p;
-            p = nullptr;
-        }
+        std::cout << "TearDown created resources" << std::endl;
     }
 };
 
@@ -37,7 +36,9 @@ protected:
 TEST_F(SchedulerTest, AddProcess)
 {
     ProcessControlBlock *pcb3 = new ProcessControlBlock(3, 2);
-    scheduler.addProcess(pcb3);
+    scheduler.addProcess(pcb3, []() {
+        std::cout << "Process 3 running" << std::endl;
+    });
 
     // Check if the process was added to the ready queue
     EXPECT_FALSE(scheduler.readyQueue.isEmpty());
@@ -104,7 +105,9 @@ TEST_F(SchedulerTest, ThreadManagerInProcessControlBlock)
         std::cout << "Thread 2 in Process 3" << std::endl;
     });
 
-    scheduler.addProcess(pcb3);
+    scheduler.addProcess(pcb3, []() {
+        std::cout << "Process 3 running" << std::endl;
+    });
 
     // Schedule the process
     scheduler.schedule();

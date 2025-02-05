@@ -1,5 +1,13 @@
 #include "threadManager.hpp"
 
+// implement destructor for ThreadManager
+ThreadManager::~ThreadManager() {
+    while (!threadReadyQueue.isEmpty()) {
+        ThreadControlBlock* t = threadReadyQueue.getNextThread();
+        delete t;
+    }
+}
+
 void ThreadManager::createThread(std::function<void()> func)
 {
     ThreadControlBlock *tcb = new ThreadControlBlock();
@@ -12,7 +20,6 @@ void ThreadManager::runAll()
     while (!threadReadyQueue.isEmpty()) {
         ThreadControlBlock* thread = threadReadyQueue.getNextThread();
         thread->task();
-        delete thread; // Clean up completed thread
     }
 }
 
@@ -21,6 +28,5 @@ void ThreadManager::runNext(){
     if (!threadReadyQueue.isEmpty()) {
         ThreadControlBlock* thread = threadReadyQueue.getNextThread();
         thread->task();
-        delete thread; // Clean up completed thread
     }
 }
