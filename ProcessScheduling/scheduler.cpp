@@ -21,7 +21,7 @@ void Scheduler::schedule() {
             ProcessControlBlock* process = readyQueue.getNextProcess();
             if (process->remaining_time > 0) {
                 all_done = 0;
-                printf("Executing process %d\n", process->id);
+                std::cout << "Executing process " << process->id << std::endl;
                 runProcess(process);
             }
         }
@@ -43,6 +43,9 @@ void Scheduler::runProcess(ProcessControlBlock *p) {
         if (p->remaining_time > 0) {
             readyQueue.addProcess(*p);
             longjmp(p->context, 1);
+        }else {
+            std::cout << "Process completed : " << p->id << std::endl;
+            delete p; // Clean up completed process
         }
     }
 }

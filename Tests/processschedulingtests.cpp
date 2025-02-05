@@ -43,6 +43,22 @@ TEST_F(SchedulerTest, AddProcess) {
     delete pcb3; // Clean up dynamically allocated memory
 }
 
+// Test case to check if processes are scheduled in the correct order
+TEST_F(SchedulerTest, ScheduleProcesses) {
+
+    // Check if the processes were executed in the correct order
+    ProcessControlBlock *process1 = scheduler.readyQueue.getNextProcess();
+    EXPECT_EQ(process1->id, 1);
+
+    ProcessControlBlock *process2 = scheduler.readyQueue.getNextProcess();
+    EXPECT_EQ(process2->id, 2);
+
+    EXPECT_TRUE(scheduler.readyQueue.isEmpty());
+
+    delete process1; // Clean up dynamically allocated memory
+    delete process2; // Clean up dynamically allocated memory
+}
+
 // Test case to check if the scheduler schedules processes correctly
 TEST_F(SchedulerTest, ScheduleProcess) {
     scheduler.schedule();
