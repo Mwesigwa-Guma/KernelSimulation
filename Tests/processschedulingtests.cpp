@@ -1,6 +1,12 @@
 #include "../ProcessScheduling/scheduler.hpp"
+#include "../SystemCall/system_call.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
+
+void threadFunc()
+{
+    std::cout << "Thread running" << std::endl;
+}
 
 // Test fixture for Scheduler tests
 class SchedulerTest : public ::testing::Test
@@ -14,16 +20,13 @@ protected:
 
     void SetUp() override
     {
-        // Initialize the scheduler with some processes
-        pcb1 = new ProcessControlBlock(1, 2);
-        pcb2 = new ProcessControlBlock(2, 3);
+        // Register system calls
+        scheduler.systemCallTable.registerSystemCall(SystemCallID::CREATE_PROCESS, [this]() {
+            scheduler.createProcess(threadFunc);
+        });
 
-        scheduler.addProcess(pcb1, []() {
-            std::cout << "Process 1 running" << std::endl;
-        });
-        scheduler.addProcess(pcb2, []() {
-            std::cout << "Process 2 running" << std::endl;
-        });
+        scheduler.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
+        scheduler.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
     }
 
     void TearDown() override
@@ -35,10 +38,7 @@ protected:
 // Test case to check if processes are added to the scheduler
 TEST_F(SchedulerTest, AddProcess)
 {
-    ProcessControlBlock *pcb3 = new ProcessControlBlock(3, 2);
-    scheduler.addProcess(pcb3, []() {
-        std::cout << "Process 3 running" << std::endl;
-    });
+    scheduler.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
 
     // Check if the process was added to the ready queue
     EXPECT_FALSE(scheduler.readyQueue.isEmpty());
@@ -97,15 +97,18 @@ TEST_F(SchedulerTest, IPCDataSharing)
 TEST_F(SchedulerTest, ThreadManagerInProcessControlBlock)
 {
     // Create a process with threads
-    ProcessControlBlock *pcb3 = new ProcessControlBlock(3, 4);
-
-    scheduler.addProcess(pcb3, []() {
-            std::cout << "Process 3 running" << std::endl;
-        });
+    scheduler.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
 
     // Schedule the process
     scheduler.schedule();
 
     // Check if the process and its threads were executed correctly
     EXPECT_TRUE(scheduler.readyQueue.isEmpty());
+}
+
+// Test case to check if system calls work correctly
+TEST_F(SchedulerTest, SystemCallTest)
+{
+    // Invoke system calls
+    scheduler.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
 }

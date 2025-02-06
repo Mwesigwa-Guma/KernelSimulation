@@ -15,8 +15,10 @@ Scheduler::~Scheduler() {
  *
  * @param pcb Process to add to the ready queue.
  */
-void Scheduler::addProcess(ProcessControlBlock* pcb, std::function<void()> func)
+void Scheduler::createProcess(std::function<void()> func)
 {
+    ProcessControlBlock* pcb = new ProcessControlBlock(++currentProcessId, 2);
+
     for(int i = 0; i < pcb->remaining_time; i += quantum){
         pcb->threadManager.createThread(func);
     }
