@@ -16,8 +16,11 @@ PROCESSHEADERS = ProcessScheduling/scheduler.hpp ProcessScheduling/ready_queue.h
 # thread headers
 THREADHEADERS = ThreadManager/ThreadManager.hpp ThreadManager/threadReadyQueue.hpp
 
+# system call headers
+SYSCALLHEADERS = SystemCall/system_call.hpp
+
 # Object files
-OBJS = test.o scheduler.o processschedulingtests.o threadmanager.o threadmanagertests.o
+OBJS = test.o scheduler.o processschedulingtests.o threadmanager.o threadmanagertests.o system_call.o
 
 # Executable name
 EXEC = simulate
@@ -30,20 +33,24 @@ $(EXEC): $(OBJS)
 	$(CLANG) $(CLANGFLAGS) $(GTEST_LIB) -o $(EXEC) $(OBJS)
 
 # Compile scheduler.cpp to scheduler.o
-scheduler.o: $(PROCESSHEADERS) $(THREADHEADERS) ProcessScheduling/scheduler.cpp
+scheduler.o: $(PROCESSHEADERS) $(THREADHEADERS) $(SYSCALLHEADERS) ProcessScheduling/scheduler.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ProcessScheduling/scheduler.cpp -o scheduler.o
 
 # Compile processschedulingtests.cpp to processschedulingtests.o
-processschedulingtests.o: $(PROCESSHEADERS) $(THREADHEADERS) Tests/processschedulingtests.cpp
+processschedulingtests.o: $(PROCESSHEADERS) $(THREADHEADERS) $(SYSCALLHEADERS) Tests/processschedulingtests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/processschedulingtests.cpp -o processschedulingtests.o
 
 # compile threadmanagertests.cpp to threadmanagertests.o
-threadmanagertests.o: $(PROCESSHEADERS) $(THREADHEADERS) Tests/threadmanagertests.cpp
+threadmanagertests.o: $(PROCESSHEADERS) $(THREADHEADERS) $(SYSCALLHEADERS) Tests/threadmanagertests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/threadmanagertests.cpp -o threadmanagertests.o
 
 # Compile threadmanager.cpp to threadmanager.o
 threadmanager.o: $(THREADHEADERS) ThreadManager/threadManager.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ThreadManager/threadManager.cpp -o threadmanager.o
+
+# Compile system_call.cpp to system_call.o
+system_call.o: $(SYSCALLHEADERS) SystemCall/system_call.cpp
+	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) SystemCall/system_call.cpp -o system_call.o
 
 # Compile test.cpp to test.o
 test.o: Tests/test.cpp
