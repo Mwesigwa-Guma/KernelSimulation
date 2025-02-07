@@ -13,8 +13,6 @@ class ProcessManagerTest : public ::testing::Test
 {
 protected:
     ProcessManager processManager;
-    ProcessControlBlock *pcb1;
-    ProcessControlBlock *pcb2;
 
     ProcessManagerTest() : processManager() {} // Initialize process manager
 
