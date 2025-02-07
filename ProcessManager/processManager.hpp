@@ -1,6 +1,9 @@
-#include "ready_queue.hpp"
+#ifndef PROCESSMANAGER_H
+#define PROCESSMANAGER_H
+
+#include "readyQueue.hpp"
 #include "pcb.hpp"
-#include "../SystemCall/system_call.hpp"
+#include "../SystemCall/systemCall.hpp"
 
 /**
  * @brief A class to manage the scheduling of processes.
@@ -24,3 +27,5 @@ class ProcessManager
         SystemCallTable systemCallTable; // System call table
         int currentProcessId = 0; // The ID of the current process
 };
+
+#endif // PROCESSMANAGER_H

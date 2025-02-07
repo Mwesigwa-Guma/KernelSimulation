@@ -22,13 +22,14 @@ void SystemCallTable::invokeSystemCall(SystemCallID id)
 }
 
 // Simulated system call to create a process
-void SystemCallTable::create_process(std::function<void()> threadFunc)
+void create_process()
 {
-    processManager.createProcess(threadFunc);
+    std::cout << "Simulated system call: create_process" << std::endl;
+    // Implement process creation logic here
 }
 
 // Simulated system call to allocate memory
-void SystemCallTable::allocate_memory()
+void allocate_memory()
 {
     std::cout << "Simulated system call: allocate_memory" << std::endl;
     // Implement memory allocation logic here

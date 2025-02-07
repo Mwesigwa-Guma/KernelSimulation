@@ -1,5 +1,5 @@
 #include "../ProcessManager/processManager.hpp"
-#include "../SystemCall/system_call.hpp"
+#include "../SystemCall/systemCall.hpp"
 #include <gtest/gtest.h>
 #include <iostream>
 

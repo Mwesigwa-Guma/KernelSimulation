@@ -10,17 +10,8 @@ GTEST_INC = -I/opt/homebrew/include
 # Library path and linking flags for Google Test
 GTEST_LIB = -L/opt/homebrew/lib -lgtest -lgtest_main -pthread
 
-# header files
-PROCESSHEADERS = ProcessManager/processManager.hpp ProcessManager/ready_queue.hpp ProcessManager/pcb.hpp ProcessManager/message_queue.hpp
-
-# thread headers
-THREADHEADERS = ThreadManager/ThreadManager.hpp ThreadManager/threadReadyQueue.hpp
-
-# system call headers
-SYSCALLHEADERS = SystemCall/system_call.hpp
-
 # Object files
-OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o system_call.o memorymanager.o
+OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o
 
 # Executable name
 EXEC = simulate
@@ -48,9 +39,9 @@ threadmanagertests.o: Tests/threadmanagertests.cpp
 threadmanager.o: ThreadManager/threadManager.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) ThreadManager/threadManager.cpp -o threadmanager.o
 
-# Compile system_call.cpp to system_call.o
-system_call.o: SystemCall/system_call.cpp
-	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) SystemCall/system_call.cpp -o system_call.o
+# Compile systemCall.cpp to systemCall.o
+systemCall.o: SystemCall/systemCall.cpp
+	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) SystemCall/systemCall.cpp -o systemCall.o
 
 # comile memorymanager.cpp to memorymanager.o
 memorymanager.o: MemoryManager/memoryManager.cpp
