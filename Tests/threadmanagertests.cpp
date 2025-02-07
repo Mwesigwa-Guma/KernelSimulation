@@ -17,7 +17,7 @@ void threadThree()
     std::cout << "Thread 3 running" << std::endl;
 }
 
-// Test fixture for Scheduler tests
+// Test fixture for process manager tests
 class ThreadManagerTest : public ::testing::Test
 {
 protected:
@@ -43,7 +43,7 @@ protected:
     }
 };
 
-// Test case to check if threads are added to the scheduler
+// Test case to check if threads are added to the processmanager
 TEST_F(ThreadManagerTest, AddThread)
 {
     manager.createThread(threadThree);
@@ -67,7 +67,7 @@ TEST_F(ThreadManagerTest, RunThreadTasks)
     delete t2;
 }
 
-// Test case to check if the scheduler schedules processes correctly
+// Test case to check if the process manager schedules processes correctly
 TEST_F(ThreadManagerTest, Run)
 {
     EXPECT_NO_THROW(manager.runAll());

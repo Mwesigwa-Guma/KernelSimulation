@@ -6,13 +6,13 @@
  * @brief A class to manage the scheduling of processes.
  *
  */
-class Scheduler
+class ProcessManager
 {
         void runProcess(ProcessControlBlock *p);
         int quantum = 1;           // Time slice for each thread
     public:
-        Scheduler() {}
-        ~Scheduler();
+        ProcessManager() {}
+        ~ProcessManager();
 
         // void addProcess(ProcessControlBlock* pcb, std::function<void()> func); // Remove this line
         void schedule();

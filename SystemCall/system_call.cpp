@@ -2,15 +2,15 @@
 /*This file is not being used but maybe usefull later*/
 
 #include "system_call.hpp"
-#include "../ProcessScheduling/pcb.hpp"
-#include "../ProcessScheduling/scheduler.hpp"
+#include "../ProcessManager/pcb.hpp"
+#include "../ProcessManager/processManager.hpp"
 #include "../ThreadManager/threadManager.hpp"
 #include <iostream>
 
 
 
 // Simulated system call to create a process
-void create_process(int id, int remaining_time, Scheduler scheduler) {
+void create_process(int id, int remaining_time, ProcessManager processManager) {
     // Create a new process
 }
 
