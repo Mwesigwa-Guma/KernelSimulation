@@ -1,8 +1,8 @@
-#include "scheduler.hpp"
+#include "processManager.hpp"
 #include <iostream>
 
-// implement destructor for scheduler
-Scheduler::~Scheduler() {
+// implement destructor for process manager
+ProcessManager::~ProcessManager() {
     while (!readyQueue.isEmpty()) {
         ProcessControlBlock* p = readyQueue.getNextProcess();
         delete p;
@@ -11,11 +11,11 @@ Scheduler::~Scheduler() {
 }
 
 /**
- * @brief Add a process to the scheduler.
+ * @brief Add a process to the process manger.
  *
  * @param pcb Process to add to the ready queue.
  */
-void Scheduler::createProcess(std::function<void()> func)
+void ProcessManager::createProcess(std::function<void()> func)
 {
     ProcessControlBlock* pcb = new ProcessControlBlock(++currentProcessId, 2);
 
@@ -29,7 +29,7 @@ void Scheduler::createProcess(std::function<void()> func)
 /**
  * @brief Schedule the next process based on round-robin.
  */
-void Scheduler::schedule() {
+void ProcessManager::schedule() {
     while (true) {
         int all_done = 1;
         while (!readyQueue.isEmpty()) {
@@ -46,7 +46,7 @@ void Scheduler::schedule() {
     }
 }
 
-void Scheduler::runProcess(ProcessControlBlock *p) {
+void ProcessManager::runProcess(ProcessControlBlock *p) {
     if (setjmp(p->context) == 0) {
         // Execute process for one quantum
         if (p->remaining_time > quantum) {
@@ -75,7 +75,7 @@ void Scheduler::runProcess(ProcessControlBlock *p) {
  * @param processId The ID of the process to send the message to.
  * @param message The message to send.
  */
-void Scheduler::sendMessage(int processId, const std::string& message) {
+void ProcessManager::sendMessage(int processId, const std::string& message) {
     // Find the process with the given ID and send the message
     std::queue<ProcessControlBlock*> tempQueue;
     while (!readyQueue.isEmpty()) {
@@ -98,7 +98,7 @@ void Scheduler::sendMessage(int processId, const std::string& message) {
  * @param processId The ID of the process to receive the message from.
  * @return std::string The received message.
  */
-std::string Scheduler::receiveMessage(int processId) {
+std::string ProcessManager::receiveMessage(int processId) {
     // Find the process with the given ID and receive the message
     std::queue<ProcessControlBlock*> tempQueue;
     std::string message;

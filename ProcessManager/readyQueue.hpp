@@ -1,6 +1,6 @@
-// filepath: /Users/mwesigwaguma/Desktop/repos/Projects/KernelSimulation/ready_queue.h
-#ifndef READY_QUEUE_H
-#define READY_QUEUE_H
+// filepath: /Users/mwesigwaguma/Desktop/repos/Projects/KernelSimulation/readyQueue.h
+#ifndef READYQUEUE_H
+#define READYQUEUE_H
 
 #include "pcb.hpp"
 #include <queue>
@@ -54,4 +54,4 @@ private:
     std::queue<ProcessControlBlock*> queue;
 };
 
-#endif // READY_QUEUE_H
+#endif // READYQUEUE_H

@@ -1,5 +1,5 @@
-#ifndef SYSTEM_CALL_H
-#define SYSTEM_CALL_H
+#ifndef SYSTEMCALL_H
+#define SYSTEMCALL_H
 
 #include <unordered_map>
 #include <functional>
@@ -18,26 +18,15 @@ using SystemCallFunction = std::function<void()>;
 // System Call Table
 class SystemCallTable {
 public:
-
-    int processIdCounter = 0;
-    void registerSystemCall(SystemCallID id, SystemCallFunction func) {
-        table[id] = func;
-    }
-
-    void invokeSystemCall(SystemCallID id) {
-        if (table.find(id) != table.end()) {
-            table[id]();
-        } else {
-            throw std::runtime_error("System call with id()not found.");
-        }
-    }
-
+    void registerSystemCall(SystemCallID id, SystemCallFunction func);
+    void invokeSystemCall(SystemCallID id);
+    
 private:
     std::unordered_map<SystemCallID, SystemCallFunction> table;
 };
 
-// Simulated system calls
+
 void create_process();
 void allocate_memory();
 
-#endif // SYSTEM_CALL_H
+#endif // SYSTEMCALL_H
