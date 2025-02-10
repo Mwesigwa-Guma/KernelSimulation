@@ -12,7 +12,6 @@ struct MemoryBlock {
 // Memory Map to track allocated and free memory blocks
 class MemoryMap {
 private:
-    std::vector<MemoryBlock> memoryBlocks;
     std::mutex mtx;
     const int totalMemorySize = 2048;
 
@@ -25,4 +24,6 @@ public:
     void deallocateMemory(int startAddress);
     void mergeFreeBlocks();
     void displayMemoryMap();
+
+    std::vector<MemoryBlock> memoryBlocks;
 };

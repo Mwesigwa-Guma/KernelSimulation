@@ -8,6 +8,7 @@
 // Define system call IDs
 enum class SystemCallID {
     CREATE_PROCESS,
+    ALLOCATE_MEMORY,
     // Add more system call IDs as needed
 };
 

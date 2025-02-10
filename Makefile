@@ -11,7 +11,8 @@ GTEST_INC = -I/opt/homebrew/include
 GTEST_LIB = -L/opt/homebrew/lib -lgtest -lgtest_main -pthread
 
 # Object files
-OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o
+OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o \
+	   systemcalltests.o memorymanagertests.o
 
 # Executable name
 EXEC = simulate
@@ -34,6 +35,14 @@ ProcessManagertests.o: Tests/ProcessManagertests.cpp
 # compile threadmanagertests.cpp to threadmanagertests.o
 threadmanagertests.o: Tests/threadmanagertests.cpp
 	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/threadmanagertests.cpp -o threadmanagertests.o
+
+# compile systemcalltests.cpp to systemcalltests.o
+systemcalltests.o: Tests/systemcalltests.cpp
+	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/systemcalltests.cpp -o systemcalltests.o
+
+# compile memorymanagertests.cpp to memorymanagertests.o
+memorymanagertests.o: Tests/memorymanagertests.cpp
+	$(CLANG) $(CLANGFLAGS) -c  $(GTEST_INC) Tests/memorymanagertests.cpp -o memorymanagertests.o
 
 # Compile threadmanager.cpp to threadmanager.o
 threadmanager.o: ThreadManager/threadManager.cpp
