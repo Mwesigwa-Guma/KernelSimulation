@@ -5,6 +5,7 @@
 #include <setjmp.h>
 #include "messageQueue.hpp"
 #include "../ThreadManager/threadManager.hpp"
+#include "../MemoryManager/memoryManager.hpp"
 
 /**
  * @brief A struct to represent a process control block.
@@ -15,6 +16,7 @@ struct ProcessControlBlock {
     jmp_buf context;       // Context for setjmp/longjmp
     MessageQueue msgQueue; // Message queue for IPC
     ThreadManager threadManager; // Thread manager for executing thread tasks
+    MemoryMap memoryMap; // Memory map for memory management
 
     /**
      * @brief Construct a new ProcessControlBlock object.
@@ -23,7 +25,8 @@ struct ProcessControlBlock {
      * @param remainingTime The remaining time for the process.
      */
     ProcessControlBlock(int processId, int remainingTime)
-        : id(processId), remaining_time(remainingTime) {}
+        : id(processId), remaining_time(remainingTime) {
+        }
 
     /**
      * @brief Destroy the ProcessControlBlock object.

@@ -4,17 +4,29 @@
 int MemoryMap::allocateMemory(int size)
 {
     std::lock_guard<std::mutex> lock(mtx);
-    for (auto &block : memoryBlocks)
+    for (std::vector<MemoryBlock>::iterator it = memoryBlocks.begin(); it != memoryBlocks.end(); ++it)
     {
-        if (!block.allocated && block.size >= size)
+        if (!it->allocated && it->size >= size)
         {
-            int startAddress = block.start;
-            if (block.size > size)
+            int startAddress = it->start;
+
+            // First modify the current block
+            if (it->size > size)
             {
-                memoryBlocks.push_back({block.start + size, block.size - size, false});
+                // Modify the size and allocation before modifying the vector
+                int remainingSize = it->size - size;
+                it->size = size;
+                it->allocated = true;
+
+                // After modifying the block, add the new free block
+                memoryBlocks.push_back({startAddress + size, remainingSize, false});
             }
-            block.size = size;
-            block.allocated = true;
+            else
+            {
+                // If block size equals requested size, just mark it as allocated
+                it->allocated = true;
+            }
+
             std::cout << "Allocated " << size << " bytes at address " << startAddress << "." << std::endl;
             return startAddress;
         }
