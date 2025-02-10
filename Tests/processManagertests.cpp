@@ -3,11 +3,6 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-void threadFunc()
-{
-    std::cout << "Thread running" << std::endl;
-}
-
 // Test fixture for process manager tests
 class ProcessManagerTest : public ::testing::Test
 {
@@ -19,12 +14,11 @@ protected:
     void SetUp() override
     {
         // Register system calls
-        processManager.systemCallTable.registerSystemCall(SystemCallID::CREATE_PROCESS, [this]() {
-            processManager.createProcess(threadFunc);
-        });
+        processManager.registerSysCall(SystemCallID::CREATE_PROCESS);
 
-        processManager.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
-        processManager.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
+        // Create two processes
+        processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
+        processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
     }
 
     void TearDown() override
@@ -36,7 +30,7 @@ protected:
 // Test case to check if processes are added to the process manager
 TEST_F(ProcessManagerTest, AddProcess)
 {
-    processManager.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
+    processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
 
     // Check if the process was added to the ready queue
     EXPECT_FALSE(processManager.readyQueue.isEmpty());
@@ -95,7 +89,7 @@ TEST_F(ProcessManagerTest, IPCDataSharing)
 TEST_F(ProcessManagerTest, ThreadManagerInProcessControlBlock)
 {
     // Create a process with threads
-    processManager.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
+    processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
 
     // Schedule the process
     processManager.schedule();
@@ -108,5 +102,5 @@ TEST_F(ProcessManagerTest, ThreadManagerInProcessControlBlock)
 TEST_F(ProcessManagerTest, SystemCallTest)
 {
     // Invoke system calls
-    processManager.systemCallTable.invokeSystemCall(SystemCallID::CREATE_PROCESS);
+    processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
 }
