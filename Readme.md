@@ -30,7 +30,7 @@ To run the simulation, execute the following command:
 ./simulate
 ```
 
-The simulation demonstrates two processes passing messages to each other.
+The simulation demonstrates two processes displaying their memory.
 
 ## Running the Tests
 

@@ -24,10 +24,6 @@ int main() {
     processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
     processManager.invokeSysCall(SystemCallID::CREATE_PROCESS);
 
-    // Assign functions to processes
-    processManager.readyQueue.getNextProcess()->threadManager.createThread([&processManager]() { process1Func(processManager); });
-    processManager.readyQueue.getNextProcess()->threadManager.createThread([&processManager]() { process2Func(processManager); });
-
     // Schedule processes
     processManager.schedule();
 
