@@ -1,35 +1,61 @@
-# Kernel Simulation in User Space
+# Kernel Simulation Project
 
-This project aims to implement a kernel simulation in user space. The goal is to create a simulated environment that mimics the behavior of a kernel, allowing for experimentation and learning without the need for modifying actual kernel code.
+This project simulates a simple kernel with process and thread management, memory management, and inter-process communication (IPC). The kernel includes a process manager, thread manager, memory manager, and system call interface.
 
-## Features
+## Project Structure
 
-- Simulated process scheduling
-- Memory management
-- Inter-process communication
-- File system simulation
+- `ProcessManager/`: Contains the process manager and related files.
+- `ThreadManager/`: Contains the thread manager and related files.
+- `MemoryManager/`: Contains the memory manager and related files.
+- `SystemCall/`: Contains the system call interface and related files.
+- `Tests/`: Contains the test files for the project.
+- `simulate.cpp`: A simulation file that demonstrates two processes passing messages to each other.
+- `Makefile`: The makefile to build the project.
 
-## Getting Started
+## Building the Project
 
-To get started with the project, clone the repository and follow the instructions in the `INSTALL.md` file.
+To build the project, run the following command:
 
-```bash
-git clone https://github.com/yourusername/KernelSimulation.git
-cd KernelSimulation
+```sh
+make
 ```
 
-## Usage
+This will compile the project and create two executables: `test` and `simulate`.
 
-Run the simulation using the following command:
+## Running the Simulation
 
-```bash
+To run the simulation, execute the following command:
+
+```sh
 ./simulate
 ```
 
-## Contributing
+The simulation demonstrates two processes passing messages to each other.
 
-Contributions are welcome! Please read the `CONTRIBUTING.md` file for guidelines on how to contribute to this project.
+## Running the Tests
 
-## Acknowledgements
+To run the tests, execute the following command:
 
-- Thanks to all the contributors who have helped in the development of this project.
+```sh
+./test
+```
+
+The tests use Google Test to verify the functionality of the process manager, thread manager, memory manager, and system call interface.
+
+## Project Components
+
+### Process Manager
+
+The process manager is responsible for creating, scheduling, and managing processes. It uses a round-robin scheduling algorithm and supports inter-process communication (IPC) through message passing.
+
+### Thread Manager
+
+The thread manager is responsible for creating and managing threads within a process. It uses a ready queue to manage the execution of threads.
+
+### Memory Manager
+
+The memory manager is responsible for allocating and deallocating memory for processes. It uses a memory map to track allocated and free memory blocks.
+
+### System Call Interface
+
+The system call interface provides a way for processes to request services from the kernel. It supports system calls for creating processes and allocating memory.
