@@ -25,7 +25,7 @@ void ProcessManager::createProcess()
     {
         pcb->threadManager.createThread([pcb]()
                                         { pcb->memoryMap.displayMemoryMap(); });
-    }
+    } 
 
     readyQueue.addProcess(pcb);
 }

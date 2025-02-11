@@ -11,18 +11,25 @@ GTEST_INC = -I/opt/homebrew/include
 GTEST_LIB = -L/opt/homebrew/lib -lgtest -lgtest_main -pthread
 
 # Object files
-OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o \
+TEST_OBJS = test.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o \
+	   systemcalltests.o memorymanagertests.o
+
+# Object files
+OBJS = simulate.o processManager.o ProcessManagertests.o threadmanager.o threadmanagertests.o systemCall.o memorymanager.o \
 	   systemcalltests.o memorymanagertests.o
 
 # Executable name
-EXEC = simulate
+EXEC = test simulate
 
 # Default target
 all: $(EXEC)
 
 # Link object files to create executable
-$(EXEC): $(OBJS)
-	$(CLANG) $(CLANGFLAGS) $(GTEST_LIB) -o $(EXEC) $(OBJS)
+test: $(TEST_OBJS)
+	$(CLANG) $(CLANGFLAGS) $(GTEST_LIB) -o test $(TEST_OBJS)
+
+simulate: $(OBJS)
+	$(CLANG) $(CLANGFLAGS) $(GTEST_LIB) -o simulate $(OBJS)
 
 # Compile processManager.cpp to processManager.o
 processManager.o: ProcessManager/processManager.cpp
@@ -60,6 +67,10 @@ memorymanager.o: MemoryManager/memoryManager.cpp
 test.o: Tests/test.cpp
 	$(CLANG) $(CLANGFLAGS) -c $(GTEST_INC) Tests/test.cpp -o test.o
 
+# Compile simulate.cpp to simulate.o
+simulate.o: simulate.cpp
+	$(CLANG) $(CLANGFLAGS) -c simulate.cpp -o simulate.o
+
 # Doxygen configuration file
 DOXYFILE = Doxyfile
 
@@ -69,7 +80,7 @@ docs:
 
 # Clean up build files
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(OBJS) $(TEST_OBJS) $(EXEC)
 
 # Clean up documentation
 clean_docs:
